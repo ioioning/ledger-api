@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/schemas/create_user.json",
+  "title": "User Creation Schema",
+  "description": "Schema for validating user creation payloads",
+  "type": "object",
+  "properties": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 30,
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "description": "Username must be 3-30 characters, alphanumeric with underscore/dash"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 100,
+      "description": "Valid email address"
+    },
+    "fullName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "User's full name"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 18,
+      "maximum": 150,
+      "description": "User's age (must be 18+)"
+    },
+    "preferences": {
+      "type": "object",
+      "properties": {
+        "newsletter": {
+          "type": "boolean",
+          "default": false
+        },
+        "notifications": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["username", "email"],
+  "additionalProperties": false
+}

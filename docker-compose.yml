@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  ipld-api:
+    build: .
+    container_name: ipld-api-server
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist data outside container
+      - ./schemas:/app/schemas:ro
+      - ipld-data:/app/ipld_store
+      - ipld-index:/app
+    environment:
+      # Configuration via environment variables
+      - MAX_PAYLOAD_SIZE=1048576
+      - MAX_CHAIN_NAME_LENGTH=100
+      - MAX_SCHEMA_NAME_LENGTH=100
+      - ALLOWED_HOSTS=*
+      - CORS_ORIGINS=*
+      - MAX_TRAVERSE_STEPS=10000
+      - DEFAULT_LIST_LIMIT=50
+      - MAX_LIST_LIMIT=1000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  ipld-data:
+    driver: local
+  ipld-index:
+    driver: local
